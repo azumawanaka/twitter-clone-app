@@ -21,7 +21,7 @@
                                     <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle img-xs">
                                 @endif
                                 <strong class="text-info">
-                                    @if ($tweet[0]->user_id === Auth::user()->user_id)
+                                    @if ($tweet[0]->uid === Auth::user()->user_id)
                                         Me
                                     @else
                                         {{ $tweet[0]->name }}

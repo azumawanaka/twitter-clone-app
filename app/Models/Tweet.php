@@ -24,6 +24,7 @@ class Tweet extends Model
             ->leftJoin('users', 'tweets.user_id', '=', 'users.user_id')
             ->leftJoin('comments', 'comments.tweet_id', '=', 'tweets.tweet_id')
             ->select(
+                'users.user_id as uid',
                 'users.name',
                 'users.avatar',
                 'tweets.tweet_id',
@@ -38,7 +39,7 @@ class Tweet extends Model
             ->groupBy('tweet_id');
     }
 
-    public function store(int $userId, Request $request): bool
+    public function store(int $userId, Request $request): object
     {
         return $this->create([
             'user_id' => $userId,
