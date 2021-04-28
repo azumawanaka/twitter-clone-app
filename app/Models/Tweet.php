@@ -29,14 +29,10 @@ class Tweet extends Model
                 'users.avatar',
                 'tweets.tweet_id',
                 'tweets.tweet_text',
-                'tweets.updated_at as tweet_updated_at',
-                'comments.comment_text',
-                'comments.comment_id',
-                'comments.user_id as comment_uid',
-                'comments.updated_at as comments_updated_at',
+                'tweets.updated_at as tweet_updated_at'
             )
-            ->get()
-            ->groupBy('tweet_id');
+            ->orderBy('tweet_updated_at', 'DESC')
+            ->get();
     }
 
     public function store(int $userId, Request $request): object
@@ -45,5 +41,10 @@ class Tweet extends Model
             'user_id' => $userId,
             "tweet_text"  => $request->input('tweet_text'),
         ]);
+    }
+
+    public function removeTweet(int $userId, int $tweetId)
+    {
+        $this->where(['user_id' => $userId, 'tweet_id' => $tweetId])->delete();
     }
 }
