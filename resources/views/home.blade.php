@@ -15,8 +15,8 @@
                             <div class="media-body">
                                 <div class="text-muted text-sm d-flex justify-content-between">
                                     <div>
-                                        <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle img-xs">
-                                        <strong class="text-info">
+                                        <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle img-sm">
+                                        <strong>
                                             @if ($tweet->uid === Auth::user()->user_id)
                                                 Me
                                             @else
@@ -27,16 +27,16 @@
                                                     <div class="modal-dialog modal-sm">
                                                         <div class="modal-content">
                                                             <!-- Modal footer -->
-                                                            <div class="modal-footer d-flex justify-content-center">
-                                                                <div>
+                                                            <div class="modal-footer">
+                                                                <div class="col-12">
                                                                     @if (isset($follower))
                                                                         @if ($follower->following === Auth::user()->user_id && $follower->follower === $tweet->uid)
-                                                                            <a href="{{ route('tweet.user.unFollow', ['followerId' => $follower->follower_id, 'userId' => $tweet->uid]) }}" class="btn btn-md btn-warning">Unfollow</a>
-                                                                        @else
-                                                                            <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-md btn-info text-white">Follow</a>
+                                                                            <p>You followed {{ $tweet->name }}.</p>
+                                                                            <a href="{{ route('tweet.user.unFollow', ['followerId' => $follower->follower_id, 'userId' => $tweet->uid]) }}" class="btn btn-block btn-warning">Unfollow</a>
                                                                         @endif
                                                                     @else
-                                                                        <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-md btn-info text-white">Follow</a>
+                                                                        <p>Want to follow {{ $tweet->name }}?</p>
+                                                                        <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-block btn-info text-white">Follow</a>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -44,7 +44,7 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                        </strong><br/><small>{{ $tweet->tweet_updated_at }}</small>
+                                        </strong><br/><small>{{ \Carbon\Carbon::parse($tweet->tweet_updated_at)->diffForHumans() }}</small>
                                     </div>
                                     @if (Auth::user()->user_id === $tweet->uid)
                                         <div>
@@ -103,13 +103,13 @@
                                             <div class="text-muted text-sm d-flex justify-content-between">
                                                 <div>
                                                     <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle img-xs">
-                                                    <strong class="text-info">
+                                                    <strong>
                                                     @if ($com->comment_uid === Auth::user()->user_id)
                                                         Me
                                                     @else
-                                                        {{ $com->name }}
+                                                        <span class="text-info">{{ $com->name }}</span>
                                                     @endif
-                                                    </strong><br/><small>{{ $com->cUpdatedAt }}</small>
+                                                    </strong><br/><small>{{ \Carbon\Carbon::parse($com->cUpdatedAt)->diffForHumans() }}</small>
                                                 </div>
                                                 @if (Auth::user()->user_id === $com->comment_uid)
                                                     <div>
@@ -140,7 +140,7 @@
                                                                     <!-- Modal body -->
                                                                     <div class="modal-body">
                                                                         <div class="form-group">
-                                                                            <textarea class="form-control" name="comment_text" rows="3" placeholder="Write your reply" required>{{ $com->comment_text }}</textarea>
+                                                                            <textarea class="form-control" name="comment_text" rows="3" placeholder="Write your reply here.." required>{{ $com->comment_text }}</textarea>
                                                                         </div>
                                                                     </div>
                                                     
@@ -164,7 +164,7 @@
                                                     class="form">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <textarea class="form-control" id="reply_text" name="reply_text" rows="1" placeholder="Write your reply" required></textarea>
+                                                        <textarea class="form-control" id="reply_text" name="reply_text" rows="1" placeholder="Write your reply here.." required></textarea>
                                                     </div>
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-sm btn-dark text-white">Submit</button>
@@ -178,20 +178,56 @@
                                                         <div class="text-muted text-sm d-flex justify-content-between">
                                                             <div>
                                                                 <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle img-xs">
-                                                                <strong class="text-info">
+                                                                <strong>
                                                                 @if ($reply->rUid === Auth::user()->user_id)
                                                                     Me
                                                                 @else
-                                                                    {{ $reply->name }}
+                                                                    <span class="text-info">{{ $reply->name }}</span>
                                                                 @endif
-                                                                </strong><br/><small>{{ $reply->reply_updated_at }}</small>
+                                                                </strong><br/><small>{{ \Carbon\Carbon::parse($reply->reply_updated_at)->diffForHumans() }}</small>
                                                             </div>
                                                             @if (Auth::user()->user_id === $reply->rUid)
-                                                                <a href="{{ route('comment.reply.remove', ['replyId' => $reply->rId]) }}"
-                                                                    class="btn btn-link"
-                                                                    onclick="return confirm('Are you sure you want to delete this reply?')">
-                                                                    <i class="fa fa-times text-danger"></i>
-                                                                </a>
+                                                                <div>
+                                                                    <a href="javascript:void(0)"
+                                                                        class="btn btn-sm btn-link"
+                                                                        data-toggle="modal"
+                                                                        data-target="#editReplyModal-{{ $reply->rId }}">
+                                                                        <small><i class="fa fa-edit"></i> edit</small>
+                                                                    </a>
+                                                                    <a href="{{ route('comment.reply.remove', ['replyId' => $reply->rId]) }}"
+                                                                        class="btn btn-link"
+                                                                        onclick="return confirm('Are you sure you want to delete this reply?')">
+                                                                        <i class="fa fa-times text-danger"></i>
+                                                                    </a>
+                                                                </div>
+
+                                                                <!-- Edit Reply Modal -->
+                                                                <div class="modal" id="editReplyModal-{{ $reply->rId }}">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                
+                                                                            <!-- Modal Header -->
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            </div>
+                                                                            <form action="{{ route('tweet.reply.update', ['replyId' => $reply->rId]) }}" method="post">
+                                                                                @csrf
+                                                                                <!-- Modal body -->
+                                                                                <div class="modal-body">
+                                                                                    <div class="form-group">
+                                                                                        <textarea class="form-control" name="reply_text" rows="3" placeholder="Write your reply here.." required>{{ $reply->reply_text }}</textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                
+                                                                                <!-- Modal footer -->
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit" class="btn btn-success">Submit</button>
+                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             @endif
                                                         </div>
                                                         <div class="mb-4">
@@ -223,6 +259,7 @@
         </div>
     </div>
 </div>
+
 <!-- Create Modal -->
 <div class="modal" id="tweetModal">
     <div class="modal-dialog">

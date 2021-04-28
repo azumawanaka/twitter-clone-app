@@ -19,6 +19,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -79,6 +80,10 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+
+                                    <a class="dropdown-item" href="{{ route('chat') }}">
+                                        {{ __('Chats') }}
+                                    </a>
                                 </div>
                             </li>
                         @endguest
@@ -105,5 +110,13 @@
             @yield('content')
         </main>
     </div>
+    
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+  
+@yield('sub-script')
+@stack('sub-scripts')
 </body>
 </html>

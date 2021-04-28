@@ -10009,3 +10009,8 @@ h3 {
 .img-sm {
   width: 30px;
 }
+
+.card-horizontal {
+  display: flex;
+  flex: 1 1 auto;
+}

@@ -10,7 +10,10 @@
 .img-xs {
     width: 20px;
 }
-
 .img-sm {
     width: 30px;
+}
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
 }

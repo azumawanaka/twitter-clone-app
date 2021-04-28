@@ -43,8 +43,6 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request)
@@ -54,12 +52,12 @@ class HomeController extends Controller
         $tweetData = $this->tweetModel->getAllTweets($freeWord);
         $tweetCommentData = $this->commentModel->getAllComments();
         $tweetReplyData = $this->replyModel->getAllReply();
-        $followerData = $this->followerModel->checkFollowedUser($userId);
+        $checkFollower = $this->followerModel->checkFollowedUser($userId);
         return view('home', [
             'tweets' => $tweetData,
             'comments' => $tweetCommentData,
             'replies' => $tweetReplyData,
-            'follower' => $followerData,
+            'follower' => $checkFollower,
         ]);
     }
 
@@ -146,9 +144,20 @@ class HomeController extends Controller
     {
         $userId = auth()->user()->user_id;
         $storeReply = $this->replyModel->reply($userId, $commentId, $request);
-
         if($storeReply) {
             $msg = array("type" => "success", "title" => "Success!", "msg" => "Reply was successfull!");
+        }else{
+            $msg = array("type" => "danger", "title" => "Error!", "msg" => "Something went wrong. Please try again later.");
+        }
+
+        return Redirect::back()->with('message', $msg);
+    }
+
+    public function updateReply(int $replyId, Request $request)
+    {
+        $updateReply = $this->replyModel->updateReply($replyId, $request);
+        if($updateReply) {
+            $msg = array("type" => "success", "title" => "Success!", "msg" => "Reply was successfully updated!");
         }else{
             $msg = array("type" => "danger", "title" => "Error!", "msg" => "Something went wrong. Please try again later.");
         }

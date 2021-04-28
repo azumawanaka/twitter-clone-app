@@ -46,6 +46,15 @@ class Reply extends Model
         ]);
     }
 
+    public function updateReply(int $replyId, Request $request)
+    {
+        return $this
+            ->where('reply_id', $replyId)
+            ->update([
+                "reply_text"  => $request->input('reply_text'),
+            ]);
+    }
+
     public function removeReply(int $userId, int $replyId)
     {
         $this->where(['user_id' => $userId, 'reply_id' => $replyId])->delete();
