@@ -53,6 +53,12 @@
                                 </li>
                             @endif
                         @else
+                            <li>
+                                <form action="{{ route('home') }}" method="GET" class="form-inline my-2 my-lg-0">
+                                    <input class="form-control mr-sm-2" name="free_word" type="text" placeholder="Search tweets">
+                                    <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                                </form>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Welcome <span class="text-info">{{ Auth::user()->name }}</span>
@@ -82,6 +88,20 @@
         </nav>
 
         <main class="py-4">
+            <div class="container">
+                @if (isset(Session::get('message')['type']))
+                    @component('alert')
+                        @slot('type')
+                            {{Session::get('message')['type']}}
+                        @endslot
+
+                        @slot('title')
+                            {{Session::get('message')['title']}}
+                        @endslot
+                        {{Session::get('message')['msg']}}
+                    @endcomponent
+                @endif
+            </div>
             @yield('content')
         </main>
     </div>

@@ -18,7 +18,7 @@ class Tweet extends Model
         'tweet_text',
     ];
 
-    public function getAllTweets(): object
+    public function getAllTweets($freeWord = ""): object
     {
         return $this
             ->leftJoin('users', 'tweets.user_id', '=', 'users.user_id')
@@ -31,6 +31,7 @@ class Tweet extends Model
                 'tweets.tweet_text',
                 'tweets.updated_at as tweet_updated_at'
             )
+            ->where('tweet_text', 'like', '%' . $freeWord . '%')
             ->orderBy('tweet_updated_at', 'DESC')
             ->get();
     }

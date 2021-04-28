@@ -17,7 +17,6 @@ class CreateFollowersTable extends Migration
             $table->id('follower_id');
             $table->integer('following');
             $table->integer('follower');
-            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

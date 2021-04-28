@@ -9,7 +9,6 @@
                     {{ __('Tweets') }}
                     <button type="button" class="btn btn-info btn-sm text-white" data-toggle="modal" data-target="#tweetModal"><i class="fa fa-plus"></i> New Tweets</button>
                 </div>
-
                 <div class="card-body">
                     <div class="media-block">
                         @foreach ($tweets as $key => $tweet)
@@ -21,7 +20,29 @@
                                             @if ($tweet->uid === Auth::user()->user_id)
                                                 Me
                                             @else
-                                                {{ $tweet->name }}
+                                                <a href="javascript:void(0)" class="btn-link text-info" data-toggle="modal" data-target="#followModal-{{ $tweet->uid }}">{{ $tweet->name }}</a>
+
+                                                <!-- Follow Modal -->
+                                                <div class="modal" id="followModal-{{ $tweet->uid }}">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-content">
+                                                            <!-- Modal footer -->
+                                                            <div class="modal-footer d-flex justify-content-center">
+                                                                <div>
+                                                                    @if (isset($follower))
+                                                                        @if ($follower->following === Auth::user()->user_id && $follower->follower === $tweet->uid)
+                                                                            <a href="{{ route('tweet.user.unFollow', ['followerId' => $follower->follower_id, 'userId' => $tweet->uid]) }}" class="btn btn-md btn-warning">Unfollow</a>
+                                                                        @else
+                                                                            <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-md btn-info text-white">Follow</a>
+                                                                        @endif
+                                                                    @else
+                                                                        <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-md btn-info text-white">Follow</a>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endif
                                         </strong><br/><small>{{ $tweet->tweet_updated_at }}</small>
                                     </div>

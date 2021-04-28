@@ -28,3 +28,6 @@ Route::post('/home/update/{commentId}', [App\Http\Controllers\HomeController::cl
 Route::get('/home/remove/{commentId}', [App\Http\Controllers\HomeController::class, 'removeComment'])->name('tweet.comment.remove');
 Route::post('/home/comment/{commentId}', [App\Http\Controllers\HomeController::class, 'reply'])->name('tweet.reply');
 Route::get('/home/reply/remove/{replyId}', [App\Http\Controllers\HomeController::class, 'removeReply'])->name('comment.reply.remove');
+
+Route::get('/home/follow/{userId}', [App\Http\Controllers\HomeController::class, 'follow'])->name('tweet.user.follow');
+Route::get('/home/{userId},unFollow/{followerId}', [App\Http\Controllers\HomeController::class, 'unFollow'])->name('tweet.user.unFollow');
