@@ -66,6 +66,19 @@ class HomeController extends Controller
         return Redirect::back()->with('message', $msg);
     }
 
+    public function updateTweet(int $tweetId, Request $request)
+    {
+        $userId = auth()->user()->user_id;
+        $updateTweet = $this->tweetModel->updateTweet($userId, $tweetId, $request);
+        if($updateTweet) {
+            $msg = array("type" => "success", "title" => "Success!", "msg" => "Tweet was successfully updated!");
+        }else{
+            $msg = array("type" => "danger", "title" => "Error!", "msg" => "Something went wrong. Please try again later.");
+        }
+
+        return Redirect::back()->with('message', $msg);
+    }
+
     public function removeTweet(int $tweetId)
     {
         $userId = auth()->user()->user_id;
@@ -86,6 +99,19 @@ class HomeController extends Controller
 
         if($storeComment) {
             $msg = array("type" => "success", "title" => "Success!", "msg" => "Comment was successfull!");
+        }else{
+            $msg = array("type" => "danger", "title" => "Error!", "msg" => "Something went wrong. Please try again later.");
+        }
+
+        return Redirect::back()->with('message', $msg);
+    }
+
+    public function updateComment(int $commentId, Request $request)
+    {
+        $userId = auth()->user()->user_id;
+        $updateComment = $this->commentModel->updateComment($userId, $commentId, $request);
+        if($updateComment) {
+            $msg = array("type" => "success", "title" => "Success!", "msg" => "Tweet was successfully updated!");
         }else{
             $msg = array("type" => "danger", "title" => "Error!", "msg" => "Something went wrong. Please try again later.");
         }

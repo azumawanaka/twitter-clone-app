@@ -26,11 +26,47 @@
                                         </strong><br/><small>{{ $tweet->tweet_updated_at }}</small>
                                     </div>
                                     @if (Auth::user()->user_id === $tweet->uid)
-                                        <a href="{{ route('tweet.remove', ['tweetId' => $tweet->tweet_id]) }}"
-                                            class="btn btn-link"
-                                            onclick="return confirm('Are you sure you want to delete this tweet?')">
-                                            <i class="fa fa-times text-danger"></i>
-                                        </a>
+                                        <div>
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-sm btn-link"
+                                                data-toggle="modal"
+                                                data-target="#editModal-{{ $tweet->tweet_id }}">
+                                                <small><i class="fa fa-edit"></i> edit</small>
+                                            </a>
+                                            <a href="{{ route('tweet.remove', ['tweetId' => $tweet->tweet_id]) }}"
+                                                class="btn btn-link text-danger"
+                                                onclick="return confirm('Are you sure you want to delete this tweet?')">
+                                                <small><i class="fa fa-times"></i> remove</small>
+                                            </a>
+                                        </div>
+
+                                        <!-- Edit Modal -->
+                                        <div class="modal" id="editModal-{{ $tweet->tweet_id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                        
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <form action="{{ route('tweet.update', ['tweetId' => $tweet->tweet_id]) }}" method="post">
+                                                        @csrf
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" name="tweet_text" rows="3" placeholder="What's on your mind {{ Auth::user()->name }}?" required>{{ $tweet->tweet_text }}</textarea>
+                                                            </div>
+                                                        </div>
+                                        
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-success">Post</button>
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
                                 <div>{{ $tweet->tweet_text }}</div>
@@ -55,11 +91,47 @@
                                                     </strong><br/><small>{{ $com->cUpdatedAt }}</small>
                                                 </div>
                                                 @if (Auth::user()->user_id === $com->comment_uid)
-                                                    <a href="{{ route('tweet.comment.remove', ['commentId' => $com->comment_id]) }}"
-                                                        class="btn btn-link"
-                                                        onclick="return confirm('Are you sure you want to delete this comment?')">
-                                                        <i class="fa fa-times text-danger"></i>
-                                                    </a>
+                                                    <div>
+                                                        <a href="javascript:void(0)"
+                                                            class="btn btn-sm btn-link"
+                                                            data-toggle="modal"
+                                                            data-target="#editCommentModal-{{ $com->comment_id }}">
+                                                            <small><i class="fa fa-edit"></i> edit</small>
+                                                        </a>
+                                                        <a href="{{ route('tweet.comment.remove', ['commentId' => $com->comment_id]) }}"
+                                                            class="btn btn-link"
+                                                            onclick="return confirm('Are you sure you want to delete this comment?')">
+                                                            <i class="fa fa-times text-danger"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <!-- Edit Comment Modal -->
+                                                    <div class="modal" id="editCommentModal-{{ $com->comment_id }}">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                    
+                                                                <!-- Modal Header -->
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <form action="{{ route('tweet.comment.update', ['commentId' => $com->comment_id]) }}" method="post">
+                                                                    @csrf
+                                                                    <!-- Modal body -->
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <textarea class="form-control" name="comment_text" rows="3" placeholder="Write your reply" required>{{ $com->comment_text }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                    
+                                                                    <!-- Modal footer -->
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn btn-success">Submit</button>
+                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             </div>
                                             <div class="mb-0">{{ $com->comment_text }}</div>
@@ -130,7 +202,7 @@
         </div>
     </div>
 </div>
-<!-- The Modal -->
+<!-- Create Modal -->
 <div class="modal" id="tweetModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -144,7 +216,7 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <div class="form-group">
-                        <textarea class="form-control" id="tweet_text" name="tweet_text" rows="3" placeholder="What's on your mind {{ Auth::user()->name }}?" required></textarea>
+                        <textarea class="form-control" name="tweet_text" rows="3" placeholder="What's on your mind {{ Auth::user()->name }}?" required></textarea>
                     </div>
                 </div>
 

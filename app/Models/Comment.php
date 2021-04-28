@@ -48,6 +48,18 @@ class Comment extends Model
         ]);
     }
 
+    public function updateComment(int $userId, int $commentId, Request $request)
+    {
+        return $this
+            ->where([
+                'comment_id' => $commentId,
+                'user_id' => $userId
+            ])
+            ->update([
+                "comment_text"  => $request->input('comment_text'),
+            ]);
+    }
+
     public function removeComment(int $userId, int $commentId)
     {
         $this->where(['user_id' => $userId, 'comment_id' => $commentId])->delete();

@@ -43,8 +43,24 @@ class Tweet extends Model
         ]);
     }
 
+    public function updateTweet(int $userId, int $tweetId, Request $request)
+    {
+        return $this
+            ->where([
+                'tweet_id' => $tweetId,
+                'user_id' => $userId
+            ])
+            ->update([
+                "tweet_text"  => $request->input('tweet_text'),
+            ]);
+    }
+
     public function removeTweet(int $userId, int $tweetId)
     {
-        $this->where(['user_id' => $userId, 'tweet_id' => $tweetId])->delete();
+        $this->where([
+            'user_id' => $userId,
+            'tweet_id' => $tweetId
+        ])
+        ->delete();
     }
 }
