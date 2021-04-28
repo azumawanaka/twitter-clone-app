@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <div class="media-block">
-                        @foreach ($tweets as $key => $tweet)
+                        @forelse ($tweets as $key => $tweet)
                             <div class="media-body">
                                 <div class="text-muted text-sm d-flex justify-content-between">
                                     <div>
@@ -252,7 +252,9 @@
                                 </form>
                             </div>
                             <hr>
-                        @endforeach
+                        @empty
+                            <h1 class="text-muted text-center">It's empty...</h1>
+                        @endforelse
                       </div>
                 </div>
             </div>
