@@ -21,14 +21,14 @@ class Follower extends Model
     public function follow(int $userId, int $follower): object
     {
         return $this->create([
-            'following' => $userId,
-            'follower' => $follower,
+            'following' => $follower,
+            'follower' => $userId,
         ]);
     }
 
-    public function checkFollowedUser(int $userId): ?object
+    public function checkFollowedUser(int $userId)
     {
-        return $this->where('following', $userId)->first();
+        return $this->where('following', $userId)->get();
     }
 
     public function unFollow(int $followerId)

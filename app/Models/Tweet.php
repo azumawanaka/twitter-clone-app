@@ -23,13 +23,17 @@ class Tweet extends Model
         return $this
             ->leftJoin('users', 'tweets.user_id', '=', 'users.user_id')
             ->leftJoin('comments', 'comments.tweet_id', '=', 'tweets.tweet_id')
+            ->leftJoin('followers', 'followers.following', '=', 'tweets.user_id')
             ->select(
                 'users.user_id as uid',
                 'users.name',
                 'users.avatar',
                 'tweets.tweet_id',
                 'tweets.tweet_text',
-                'tweets.updated_at as tweet_updated_at'
+                'tweets.updated_at as tweet_updated_at',
+                'followers.following',
+                'followers.follower',
+                'followers.follower_id'
             )
             ->where('tweet_text', 'like', '%' . $freeWord . '%')
             ->orderBy('tweet_updated_at', 'DESC')

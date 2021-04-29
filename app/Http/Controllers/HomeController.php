@@ -53,6 +53,7 @@ class HomeController extends Controller
         $tweetCommentData = $this->commentModel->getAllComments();
         $tweetReplyData = $this->replyModel->getAllReply();
         $checkFollower = $this->followerModel->checkFollowedUser($userId);
+
         return view('home', [
             'tweets' => $tweetData,
             'comments' => $tweetCommentData,

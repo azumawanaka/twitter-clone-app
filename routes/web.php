@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function() {
-    Route::get('/', function () {
-        return view('welcome');
-    });
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/home/store', [App\Http\Controllers\HomeController::class, 'store'])->name('tweet.store');
     Route::post('/home/{tweetId}/update', [App\Http\Controllers\HomeController::class, 'updateTweet'])->name('tweet.update');

@@ -21,28 +21,30 @@
                                                 Me
                                             @else
                                                 <a href="javascript:void(0)" class="btn-link text-info" data-toggle="modal" data-target="#followModal-{{ $tweet->uid }}">{{ $tweet->name }}</a>
-
-                                                <!-- Follow Modal -->
-                                                <div class="modal" id="followModal-{{ $tweet->uid }}">
-                                                    <div class="modal-dialog modal-sm">
-                                                        <div class="modal-content">
-                                                            <!-- Modal footer -->
-                                                            <div class="modal-footer">
-                                                                <div class="col-12">
-                                                                    @if (isset($follower))
-                                                                        @if ($follower->following === Auth::user()->user_id && $follower->follower === $tweet->uid)
-                                                                            <p>You followed {{ $tweet->name }}.</p>
-                                                                            <a href="{{ route('tweet.user.unFollow', ['followerId' => $follower->follower_id, 'userId' => $tweet->uid]) }}" class="btn btn-block btn-warning">Unfollow</a>
-                                                                        @endif
+                                            <!-- Follow Modal -->
+                                            <div class="modal" id="followModal-{{ $tweet->uid }}">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+                                                            <div class="col-12">
+                                                                @if ($tweet->follower === null)
+                                                                    <p>Want to follow {{ $tweet->name }}?</p>
+                                                                    <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-block btn-info text-white">Follow</a>
+                                                                @else
+                                                                    @if ($tweet->follower === Auth::user()->user_id || $tweet->following === $tweet->uid)
+                                                                        <p>You followed {{ $tweet->name }}.</p>
+                                                                        <a href="{{ route('tweet.user.unFollow', ['followerId' => $tweet->follower_id, 'userId' => $tweet->uid]) }}" class="btn btn-block btn-warning">Unfollow</a>
                                                                     @else
                                                                         <p>Want to follow {{ $tweet->name }}?</p>
                                                                         <a href="{{ route('tweet.user.follow', ['userId' => $tweet->uid]) }}" class="btn btn-block btn-info text-white">Follow</a>
                                                                     @endif
-                                                                </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                             @endif
                                         </strong><br/><small>{{ \Carbon\Carbon::parse($tweet->tweet_updated_at)->diffForHumans() }}</small>
                                     </div>
